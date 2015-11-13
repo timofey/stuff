@@ -16,6 +16,11 @@ set gdefault
 set wrap
 " set timeoutlen=250
 
+" autoload .vimrc
+autocmd! bufwritepost of .vimrc
+set pastetoggle=<F4>
+set clipboard unnamed
+
 map <F2> :mksession! ~/vim_session <cr>
 map <F3> :source ~/vim_session <cr>
 map <C-n> :NERDTreeToggle<CR>
