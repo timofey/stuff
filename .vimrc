@@ -15,6 +15,8 @@ set incsearch
 set gdefault
 set wrap
 " set timeoutlen=250
+set laststatus=2
+set autochdir
 
 " autoload .vimrc
 autocmd! bufwritepost .vimrc source %
@@ -69,6 +71,9 @@ Plugin 'guns/vim-clojure-static'
 Plugin 'luochen1990/rainbow'
 let g:rainbow_active = 1
 Plugin 'othree/eregex.vim'
+Plugin 'bling/vim-airline'
+"let g:airline_powerline_fonts = 1
+Plugin 'tpope/vim-fugitive'
 
 let g:user_emmet_leader_key="<C-n>"
 let g:UltiSnipsExpandTrigger="<C-Space>"
@@ -79,3 +84,12 @@ let g:UltiSnipsJumpBackwardTrigger="<C-b>"
 call vundle#end()
 filetype plugin indent on
 syntax on
+
+set guifont=Source\ Code\ Pro\ for\ Powerline\ 10
+set noshowmode " we have airline, dude
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_symbols.space = "\ua0"
+
+let g:airline_powerline_fonts = 1
