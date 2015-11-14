@@ -80,7 +80,11 @@ Plugin 'bling/vim-airline'
 "let g:airline_powerline_fonts = 1
 Plugin 'tpope/vim-fugitive'
 
-let g:user_emmet_leader_key="<C-n>"
+let g:user_emmet_leader_key="<C-l>" " don't forget to press , :)
+let g:user_emmet_settings = {
+\    'indentation' : '    '
+\}
+
 let g:UltiSnipsExpandTrigger="<C-Space>"
 let g:UltiSnipsJumpForwardTrigger="<C-Space>"
 let g:UltiSnipsJumpBackwardTrigger="<C-b>"
@@ -98,3 +102,5 @@ endif
 let g:airline_symbols.space = "\ua0"
 
 let g:airline_powerline_fonts = 1
+let NERDTreeMapOpenInTab='<C-Enter>'
+
