@@ -17,9 +17,13 @@ set wrap
 " set timeoutlen=250
 
 " autoload .vimrc
-autocmd! bufwritepost of .vimrc
+autocmd! bufwritepost .vimrc source %
 set pastetoggle=<F4>
-set clipboard unnamed
+set clipboard=unnamed
+set mouse=a
+
+set nobackup
+set nowritebackup
 
 map <F2> :mksession! ~/vim_session <cr>
 map <F3> :source ~/vim_session <cr>
@@ -30,10 +34,15 @@ inoremap jj <Esc>
 nnoremap <leader>w <C-w>v<C-w>l
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
+nnoremap <leader>n :tabprevious<cr>
+nnoremap <leader>m :tabnext<cr>
 nnoremap <leader>ev <C-w><C-v><C-l>:e ~/.vimrc<cr>
 nnoremap <leader><space> :noh<cr>
 nnoremap ; :
 nnoremap <buffer> <F9> :exec '!python' shellescape(@%, 1)<cr>
+vnoremap <leader>s :sort<cr>
+vnoremap < <gv
+vnoremap > >gv
 
 if $COLORTERM == 'gnome-terminal'
   set t_Co=256
