@@ -20,12 +20,14 @@ set autochdir
 
 " autoload .vimrc
 autocmd! bufwritepost .vimrc source %
+autocmd GUIEnter * <M-F10>
 set pastetoggle=<F4>
 set clipboard=unnamed
 set mouse=a
 
 set nobackup
 set nowritebackup
+set noswapfile
 
 map <F2> :mksession! ~/vim_session <cr>
 map <F3> :source ~/vim_session <cr>
