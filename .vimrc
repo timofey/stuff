@@ -20,7 +20,7 @@ set autochdir
 
 " autoload .vimrc
 autocmd! bufwritepost .vimrc source %
-autocmd GUIEnter * <M-F10>
+" autocmd GUIEnter * <C-T-Up>
 set pastetoggle=<F4>
 set clipboard=unnamed
 set mouse=a
@@ -57,6 +57,7 @@ colorscheme CandyPaper
 
 autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+autocmd  FileType  php setlocal omnifunc=phpcomplete_extended#CompletePHP
 
 set nocompatible
 filetype off
@@ -64,11 +65,8 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
-Bundle 'Shougo/vimproc'
-Bundle 'Shougo/unite.vim'
-Bundle 'm2mdas/phpcomplete-extended'
-
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'shawncplus/phpcomplete.vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'mattn/emmet-vim'
@@ -105,4 +103,6 @@ let g:airline_symbols.space = "\ua0"
 
 let g:airline_powerline_fonts = 1
 let NERDTreeMapOpenInTab='<C-Enter>'
+let g:phpcomplete_parse_docblock_comments = 1
+
 
