@@ -17,12 +17,13 @@ set wrap
 " set timeoutlen=250
 set laststatus=2
 set autochdir
+set expandtab
 
 " autoload .vimrc
 autocmd! bufwritepost .vimrc source %
 " autocmd GUIEnter * <C-T-Up>
 set pastetoggle=<F4>
-set clipboard=unnamed
+set clipboard=unnamedplus
 set mouse=a
 
 set nobackup
@@ -40,6 +41,8 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 nnoremap <leader>n :tabprevious<cr>
 nnoremap <leader>m :tabnext<cr>
+nnoremap <leader>h :tabm -1<cr>
+nnoremap <leader>j :tabm +1<cr>
 nnoremap <leader>ev <C-w><C-v><C-l>:e ~/.vimrc<cr>
 nnoremap <leader><space> :noh<cr>
 nnoremap ; :
@@ -65,8 +68,8 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
+Plugin 'rust-lang/rust.vim'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'shawncplus/phpcomplete.vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'mattn/emmet-vim'
@@ -89,12 +92,11 @@ let g:UltiSnipsExpandTrigger="<C-Space>"
 let g:UltiSnipsJumpForwardTrigger="<C-Space>"
 let g:UltiSnipsJumpBackwardTrigger="<C-b>"
 
-
 call vundle#end()
 filetype plugin indent on
 syntax on
 
-set guifont=Source\ Code\ Pro\ for\ Powerline\ 10
+set guifont=Source\ Code\ Pro\ 10
 set noshowmode " we have airline, dude
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
@@ -105,4 +107,6 @@ let g:airline_powerline_fonts = 1
 let NERDTreeMapOpenInTab='<C-Enter>'
 let g:phpcomplete_parse_docblock_comments = 1
 
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.xml,*.wsdl,*.xsd'
+let g:closetag_xhtml_filenames = '*.xhtml,*.xml,*.xsd,*.wsdl'
 
