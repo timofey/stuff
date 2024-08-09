@@ -1,0 +1,212 @@
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000000
+SAVEHIST=1000000
+setopt autocd extendedglob
+bindkey -v
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+zstyle :compinstall filename '/Users/timofey/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+
+setopt HIST_FIND_NO_DUPS
+
+export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+
+export EDITOR=/usr/bin/vim
+
+# export MC_SKIN=/home/timofey/.mc/skins/candy256.ini
+
+export EDITOR=vim
+
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias hgrep='history 0 | grep'
+alias svim='sudo vim'
+alias btop='bashtop'
+
+alias py='bpython'
+
+alias ydebug='./hybrisserver.sh debug'
+alias ybuildall='ant clean && ant mvnartifacts && ant clean all'
+alias ybuild='ant build'
+alias add-commit='git add . && git commit'
+
+alias dlogs='docker logs -f'
+alias dexec='docker exec -ti'
+
+# alias kgp='kubectl get pods -n'
+alias kge='kubectl get event -n'
+alias kl='kubectl logs -n'
+alias klf='kubectl logs -f -n'
+alias keti='kubectl exec -ti -n'
+alias ke='kubectl exec -n'
+
+function kgp() {
+    if [ -z "$2" ]; then
+        kubectl get pods -n "$1"
+    else
+        kubectl get pods -n "$1" | grep -i "$2"
+    fi
+}
+
+
+eval "$(thefuck --alias)"
+alias FUCK='fuck'
+
+alias s='sudo'
+
+
+function docker-ip() {
+    docker inspect "$1" | grep --color=never -oP '"IPAddress": "\K[^"]+'
+}
+
+function yant() {
+    source setantenv.sh && \
+        ant "$@"
+}
+
+function mkcdir() {
+    mkdir $1 && cd $1;
+}
+
+function psaux() {
+    ps aux | grep $1;
+}
+
+
+# execution time
+
+timer_show=""
+
+function timer_get_time() {
+    echo -n "$(date +%s%N | cut -b1-13)"
+}
+
+function format_spent_time() {
+    sp_time="$1"
+    if (( $(bc <<< "$sp_time > 3599.99") )); then
+        sp_hours="$(bc <<< "$sp_time / 3600")"
+        sp_left_seconds="$(bc <<< "$sp_time - $sp_hours * 3600")"
+        sp_minutes="$(bc <<< "$sp_left_seconds / 60")"
+        sp_seconds="$(bc <<< "scale=1;($sp_left_seconds - $sp_minutes * 60)/1")"
+        echo -n "${sp_hours}h ${sp_minutes}m ${sp_seconds}s"
+    elif (( $(bc <<< "$sp_time > 59.99") )); then
+        sp_minutes="$(bc <<< "$sp_time / 60")"
+        sp_seconds="$(bc <<< "scale=1;($sp_time - $sp_minutes * 60)/1")"
+        echo -n "${sp_minutes}m ${sp_seconds}s"
+    else
+        echo -n "$(printf "%.2f" "$sp_time")s"
+    fi
+}
+
+function timer_start() {
+    timer=${timer:-$(timer_get_time)}
+}
+
+function timer_stop() {
+    if [[ ! -z "$timer" ]]; then
+        curr_time="$(timer_get_time)"
+        seconds_pass="$(bc <<< "scale=2;($curr_time - $timer) / 1000")"
+        if (( $(bc <<< "scale=2;$seconds_pass > 0.01") )); then
+            timer_show="$(format_spent_time "$seconds_pass") "
+        else
+            timer_show=""
+        fi
+        unset timer
+    fi
+}
+
+# end execution time
+
+# git
+
+# get current branch in git repo
+function parse_git_branch() {
+	BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+	if [[ ! "${BRANCH}" == "" ]]
+	then
+		STAT=`parse_git_dirty`
+        echo " (${BRANCH}${STAT})"
+	else
+		echo ""
+	fi
+}
+
+# get current status of git repo
+function parse_git_dirty() {
+	gstatus=`git status 2>&1 | tee`
+	dirty=`echo -n "${gstatus}" 2> /dev/null | grep "modified:" &> /dev/null; echo "$?"`
+	untracked=`echo -n "${gstatus}" 2> /dev/null | grep "Untracked files" &> /dev/null; echo "$?"`
+	ahead=`echo -n "${gstatus}" 2> /dev/null | grep "Your branch is ahead of" &> /dev/null; echo "$?"`
+	newfile=`echo -n "${gstatus}" 2> /dev/null | grep "new file:" &> /dev/null; echo "$?"`
+	renamed=`echo -n "${gstatus}" 2> /dev/null | grep "renamed:" &> /dev/null; echo "$?"`
+	deleted=`echo -n "${gstatus}" 2> /dev/null | grep "deleted:" &> /dev/null; echo "$?"`
+	bits=''
+	if [[ "${renamed}" == "0" ]]; then
+		bits=">${bits}"
+	fi
+	if [[ "${ahead}" == "0" ]]; then
+		bits="*${bits}"
+	fi
+	if [[ "${newfile}" == "0" ]]; then
+		bits="+${bits}"
+	fi
+	if [[ "${untracked}" == "0" ]]; then
+		bits="?${bits}"
+	fi
+	if [[ "${deleted}" == "0" ]]; then
+		bits="x${bits}"
+	fi
+	if [[ "${dirty}" == "0" ]]; then
+		bits="!${bits}"
+	fi
+	if [[ ! "${bits}" == "" ]]; then
+		echo " ${bits}"
+	else
+		echo ""
+	fi
+}
+
+# end git
+
+
+function nonzero_return() {
+	RETVAL=$?
+	[ $RETVAL -ne 0 ] && echo "$RETVAL "
+}
+
+function get_mc_status() {
+    if [ -z ${MC_SID+x} ]; then
+        echo -n ""
+    else
+        echo -en " (mc) "
+    fi
+}
+
+
+
+preexec() {
+    timer_start
+}
+
+precmd() {
+    timer_show=""
+    timer_stop
+}
+
+prompt off
+setopt prompt_subst
+PROMPT='%F{160}$(nonzero_return)%f${timer_show}[%F{132}%n%f@%F{146}%m %1~%f%F{124}$(get_mc_status)%f]%F{123}$(parse_git_branch)%f $ '
+
+zstyle ':completion:*' menu yes select
+
+source /Users/timofey/.config/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# zprof
+
